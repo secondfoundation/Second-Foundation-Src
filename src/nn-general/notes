@@ -1,0 +1,11 @@
+Top level function call is: nnCostFunction
+
+(12:19:28 PM) Jay: 
+inside ex4gen you can see how it calls the nnCostFunctionVec
+(12:22:46 PM) Jay: 
+and you can see how it specifies the network structure at the top
+(12:22:57 PM) Jay: 
+networkStructure = [input_layer_size, 25, 25, num_labels];
+(12:23:08 PM) nick: sweet
+(12:23:10 PM) Jay: 
+so that's 2 hidden layers with 25 nodes

@@ -1,0 +1,39 @@
+gdp = DataReader("GDP", "fred", start=datetime.datetime(1990, 1, 1))["value"]
+
+
+baltic dry index (BDI)
+LIBOR RATE
+Core Inflation
+LIBOR
+University of Michigan Consumer Sentiment Index
+GDP
+
+
+#-------------------------------------------
+
+Publish in: Journal of Machine Learning Research? Unlikely, too high impact factor: 2.682
+What about:
+
+Engineering applications of artificial intelligence
+Impact factor = 0.762
+
+or, 
+
+Applied artificial intelligence
+Impact factor = 0.753
+
+Artificial intelligence review
+Impact factor = 0.634 (claims 1.213)
+
+Check out: A new classification approach for neural networks hardware: from standards chips to embedded systems on chip
+
+
+Data Sources:
+
+http://www.federalreserve.gov/releases/h15/update/
+
+http://research.stlouisfed.org/fred2/
+
+http://www.federalreserve.gov/boarddocs/snloansurvey/
+
+http://research.stlouisfed.org/fred2/categories/32261
