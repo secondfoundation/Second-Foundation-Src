@@ -84,10 +84,10 @@ class SampleBot(GtalkRobot):
             self.replyMessage(user, "I hear and obey. State settings changed!")
 
     def command_001_setState(self, user, message, args): 
-        '''(daikonos available)'''
+        '''(diakonos available)'''
         # the __doc__ of the function is the Regular Expression of this command, if matched, this command method will be called. 
         # The parameter "args" is a list, which will hold the matched string in parenthesis of Regular Expression.
-        self.replyMessage(user, "Daikonos is ready.")
+        self.replyMessage(user, "Diakonos is ready.")
         infos = message.split()        #self.replyMessage(user, str(args[1]))
 
     
@@ -102,9 +102,9 @@ class SampleBot(GtalkRobot):
         self.replyMessage(user, infos)
 
         #
-        # list of daikonos X commands
+        # list of diakonos X commands
         #
-        if('daikonos' in infos[0] ):
+        if('diakonos' in infos[0] ):
 
             try:
                 if('time' in infos[1]):
