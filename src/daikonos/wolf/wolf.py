@@ -36,6 +36,10 @@ class wolfram(object):
         print result_dics['Result']
  
 if __name__ == "__main__":
+    if(len(sys.argv) != 2):
+        print 'incorrect call pattern, exiting'
+        sys.exit(1)
+
     appid = sys.argv[0]
     query = sys.argv[1]
     print query
