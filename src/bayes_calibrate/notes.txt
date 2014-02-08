@@ -1,0 +1,44 @@
+# ----------------------------------------
+# Preparing your development environment: 
+# ----------------------------------------
+Easy_install is recommended to manage the packages necessary to run the
+code. Easy_install is available for Mac, Windows and Linux. 
+
+Once easy_install is available, the required packages can be installed using: 
+
+easy_install numpy 
+easy_install matplotlib
+easy_install emcee
+
+The code was intended to be run using python 2.X
+
+# ----------------------------------------
+# Editing the files
+# ----------------------------------------
+
+You will require three files, 'prior.py', 'likelihood.py' and 'channel.py'. 
+Please ensure these files are all located within the same directory. 
+
+You should only need to edit the 'prior.py' and 'likelihood.py' files. 
+The channel.py file is a driver utility for performing a Bayesian parameter estimation.
+This driver uses the python 'emcee' (http://dan.iel.fm/emcee/current/) library which is an 
+implementation of Goodman and Weare’s affine invariant MCMC sampling technique 
+(http://msp.org/camcos/2010/5-1/p04.xhtml). 
+
+# ----------------------------------------
+# Running the code
+# ----------------------------------------
+
+You can run the routine from the command line as:
+
+python channel.py
+
+This should generate several pdf plots in your local directory. 
+
+# ----------------------------------------
+# Email: nick@ices.utexas.edu for questions 
+# about building and using the code
+# ----------------------------------------
+
+
+
