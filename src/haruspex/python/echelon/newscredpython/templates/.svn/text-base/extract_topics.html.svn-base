@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+    <title>Extract Topics | NewsCred Platform</title>
+    <h1>Testing Extract Topic Method</h1>
+    <h2>The Text</h2>
+    <p>{{text}}</p>
+    <p>&nbsp;</p>
+    <h2 style="text-decoration: underlined;">Topics Extracted - Mentioned</h2>
+    {% if topics_mentioned %}
+    <ul>
+        {% for topic in topics_mentioned %}
+        <li>{{topic.name}}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <b>No topics found.</b>
+    {% endif %}
+    <p>&nbsp;</p>
+    <h2 style="text-decoration: underlined;">Topics Extracted - Related</h2>
+    {% if topics_related %}
+    <ul>
+        {% for topic in topics_related %}
+        <li>{{topic.name}}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <b>No topics found.</b>
+    {% endif %}
+    {% comment %}
+    <p>[Pass the text as request parameter i.e. ?text=Apple launches the new Iphone and see the output.]</p>
+    {% endcomment %}
+{% endblock %}

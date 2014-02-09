@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+<title>Article Clustering | NewsCred Platform</title>
+
+<h1>Article Clustering</h1>
+
+<ul>
+	<li><a href="#search">Search Stories on Haiti</a></li>
+	<li><a href="#category">Search Stories on Sports</a></li>
+	<li><a href="#topic">Search Stories on topic Roger Federar</a></li>
+</ul><br />
+
+<h2 id="search">Search Stories on Haiti</h2>
+{% for cluster in haiti_stories %}
+<h3>Cluster {{forloop.counter}}</h3>
+    <table>
+		{% for article in cluster %}
+		<tr>
+			<td class="first"><a href="{{article.link}}">{{article.title}}</a></td>
+			<td>From {{article.source.name}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endfor %}
+
+<a href="#">Back to top</a><br/>
+
+<h2 id="category">Search Stories on Sports</h2>
+{% for cluster in sport_stories %}
+<h3>Cluster {{forloop.counter}}</h3>
+    <table>
+		{% for article in cluster %}
+		<tr>
+			<td class="first"><a href="{{article.link}}">{{article.title}}</a></td>
+			<td>From {{article.source.name}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endfor %}
+
+
+<a href="#">Back to top</a><br/>
+
+<h2 id="topic">Search Stories on Roger Federar</h2>
+{% for cluster in federar_stories %}
+<h3>Cluster {{forloop.counter}}</h3>
+    <table>
+		{% for article in cluster %}
+		<tr>
+			<td class="first"><a href="{{article.link}}">{{article.title}}</a></td>
+			<td>From {{article.source.name}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endfor %}
+
+<a href="#">Back to top</a><br/>
+{% endblock %}

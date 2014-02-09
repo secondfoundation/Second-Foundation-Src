@@ -1,0 +1,158 @@
+<html>
+
+<head>
+  <script src="../js/jquery-1.7.2.js"></script>
+  <script src="../js/jquery-url.js"></script>
+  <script src="../js/socket.io.js"></script>
+  <script src="../js/highcharts.js"></script>
+  <script src="../js/charts/basicBarChart.js"></script>
+  <script src="../js/charts/basicTimeSeries.js"></script>
+</head>
+
+<body>
+
+<div>
+  <p>
+    <label for="queryInput">Stream Query</label>
+    <input type="text" id="queryInput"/>
+  </p>
+  <p>
+    <button id="startStream">Start Stream</button>
+	<button id="stopStream" disabled="disabled">Stop Stream</button>
+  </p>
+</div>
+
+<center>
+<h1 id="title"></h1>
+</center>
+
+<table>
+	<tr>
+		<td>
+			<div>
+			  <ul id="messages">			    
+			  </ul>
+			</div>
+		</td>
+		<td>
+			<div id="termsContainer" style="min - width: 400px; height: 400px; margin: 0 auto"></div>
+		</td>	
+	</tr>
+	<tr>
+			<div id="sentimentContainer" style="min - width: 400px; height: 400px; margin: 0 auto"></div>
+		
+	</tr>
+</table>	
+
+<script>
+	var termsChart;
+	var sentChart;
+
+	$(function() {
+  		$(document).ready(function() {
+      		// WEB SOCKETS //
+      	    //    var webSocket = new io.connect('23.23.187.186');
+      		 var webSocket = new io.connect('http://localhost');
+
+      		webSocket.on('connect', function() {          		
+      		});
+
+      		webSocket.on('tweet', function(data) {
+				// tweet
+				if ($('#messages li').size() > 10) {
+					$('#messages li:first').remove();
+				}
+				
+          		$('#messages').append('<li>' + data.tweet + '</li>');
+
+				// terms
+				var words = data.terms.map( function(term) {
+					return term.word;
+				});
+				
+				var chartWords = termsChart.series.map( function(series) {
+					return series.name;
+				});
+				
+				termsChart.series.map( function(series) {
+					if (words.indexOf(series.name) == -1) {
+						series.remove(false);
+					}
+				});
+				
+				data.terms.map( function(term) {
+					// term already on chart
+					if (chartWords.indexOf(term.word) != -1) {
+						termsChart.get(term.word).setData([term.total], false);
+					} else {
+						termsChart.addSeries({id: term.word, name: term.word, data: [term.total], animation: false}, false);
+					}
+				});
+				
+				termsChart.redraw();
+				
+				// sentiment
+				sentChart.series[0].addPoint([new Date().getTime(), data.coef]);
+				if (data.avg != 0) {
+					sentChart.series[1].addPoint([new Date().getTime(), data.avg]);				
+				}
+      		});
+
+      		$('#startStream').bind('click', function() {
+				webSocket.emit('stopStream', {});
+	
+				var query = $('#queryInput').val();
+				var barOptions = Highcharts.getChart('basicBarChart', 'termsContainer');
+				barOptions.xAxis.categories = [query];
+		  		termsChart = new Highcharts.Chart(barOptions);
+		
+				var sentOptions = Highcharts.getChart('basicTimeSeries', 'sentimentContainer');
+				sentOptions.series = [{
+				    min: new Date().getTime(),
+		            data: [],
+					animation: false
+		        }, {
+				    min: new Date().getTime(),
+					data: [],
+					animation: false
+				}];
+				
+				sentChart = new Highcharts.Chart(sentOptions);
+	
+				$('#title').html(query);
+          		$('#queryInput').val('');
+				$('#startStream').attr("disabled", "disabled");
+				$('#stopStream').removeAttr("disabled");
+          		webSocket.emit('startStream', {query: query, username: $.url().param('username')});
+      		});
+
+			$('#stopStream').bind('click', function() {
+				reset();
+				$('#title').html('');
+				$('#startStream').removeAttr("disabled");
+				$('#stopStream').attr("disabled", "disabled");
+				webSocket.emit('stopStream', {});
+			});
+
+			$('#queryInput').focus();
+  		}); // $ready
+	}); // $function
+	
+	function reset() {
+		$('#messages').html('');
+		
+		if (typeof(termsChart) != 'undefined') {
+			termsChart.destroy();
+			termsChart = {};
+  		}
+
+		if (typeof(sentChart) != 'undefined') {
+			sentChart.destroy();
+			sentChart = {};
+		}
+	}
+</script>
+
+</body>
+</html>
+"

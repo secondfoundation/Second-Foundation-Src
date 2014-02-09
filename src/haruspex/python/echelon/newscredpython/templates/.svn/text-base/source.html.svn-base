@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+<title>Source Module | NewsCred Platform</title>
+{%if error%}
+The following error has occurred:
+<b>{{error}}</b>
+{%else%}
+	<h1>Source Module</h1>
+	<ul>
+		<li><a href="#source">Get Source</a></li>
+		<li><a href="#topics">Get Related Topics</a></li>
+		<li><a href="#articles">Get Related Articles</a></li>
+		<li><a href="#search">Get Sources with the name 'Guardian'</a></li>
+	</ul><br />
+	
+	<h2 id="source">Get Source</h2>
+	<table>
+		<tr>
+			<td class="first">{{ source.name }}</td>
+			<td>{{ source.guid }}</td>
+		</tr>
+	</table>
+
+	<h2 id="topics">Get Related Topics</h2>
+	<table>
+		{% for topic in related_topics %}
+		<tr>
+			<td class="first">{{ topic.name }}[{{topic.classification}} - {{topic.subclassification}}]</td>
+			<td>{{ topic.guid }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<h2 id="articles">Get Related Articles</h2>
+	<table>
+		{% for article in related_articles %}
+		<tr>
+			<td class="first"><a href={{article.link}}>{{ article.title }}</a></td>
+			<td>From {{ article.source }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	
+	<h2 id="search">Get Sources with the name 'Guardian'</h2>
+	<table>
+		{% for source in search_sources %}
+		<tr>
+			<td class="first">
+			    <img src="{{source.thumbnail}}"/>
+			    <a href="{{source.website}}">{{ source.name }}</a>
+			</td>
+			<td>{{ source.guid }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<a href="#">Back to top</a><br/>
+{%endif%}
+{% endblock %}

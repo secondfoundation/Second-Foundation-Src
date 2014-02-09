@@ -1,0 +1,30 @@
+<html>
+<head>
+	<script src="js/jquery-1.7.2.js"></script>
+	<script src="js/jquery-url.js"></script>
+</head>
+
+<body>
+	<h3 id="message"></h3>
+	
+	<form method="post" action="/login">
+		<label for="username">Username:</label>
+		<input type="text" name="username">
+		<label for="password">Password:</label>
+		<input type="password" name="password">	
+	
+		<input type="submit" name="login"></submit>
+	</form>
+	
+	<script>
+		$(document).ready( function() {
+			if ($.url().param('auth') == 'false') {
+				$('#message').html('User is not authenticated');
+			} else if ($.url().param('fail') == 'true') {
+				$('#message').html('Incorrect username or password');
+			}
+		});
+	</script>
+</body>		
+
+</html>

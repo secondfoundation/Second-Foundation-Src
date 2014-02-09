@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+<title>Category Module | NewsCred Platform</title>
+{%if error%}
+	The following error has occurred:
+	<b>{{error}}</b>
+{%else%}
+	<h1>Category Module</h1>
+	<ul>
+		<li><a href="#category">Get Category</a></li>
+		<li><a href="#topics">Get Related Topics</a></li>
+		<li><a href="#articles">Get Related Articles</a></li>
+		<li><a href="#category-sources">Get Related Sources</a></li>
+		<li><a href="#articles-sources">Get Related Articles Filtered By Sources</a></li>
+	</ul><br />
+	<h2 id="category">Get Category</h2>
+	<table>
+		<tr>
+			<td class="first">{{ category.name }}</td>
+			<td></td>
+		</tr>
+	</table>
+
+	<h2 id="topics">Get Related Topics</h2>
+	<table>
+		{% for topic in related_topics %}
+		<tr>
+			<td class="first">{{ topic.name }}[{{topic.classification}} - {{topic.subclassification}}]</td>
+			<td>{{ topic.guid }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<h2 id="articles">Get Related Articles</h2>
+	<table>
+		{% for article in related_articles %}
+		<tr>
+			<td class="first"><a href={{article.link}}>{{ article.title }}</a></td>
+			<td>From {{ article.source }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+
+	<h2 id="articles-sources">Get Related Articles Filtered By Sources</h2>
+	<table>
+		{% for article in related_articles_sources %}
+		<tr>
+			<td class="first"><a href="{{article.link}}">{{ article.title }}</a></td>
+			<td> From {{ article.source }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<h2 id="articles-sources">Get Related Articles Filtered By Sources</h2>
+	<table>
+		{%for article in related_article_sources%}
+		<tr>
+			<td class="first"><a href={{article.link}}>{{article.title}}</a></td>
+			<td>{{article.guid}}</td>
+		</tr>
+		{%endfor%}
+	</table>
+	<a href="#">Back to top</a><br/>
+{%endif%}
+{% endblock %}

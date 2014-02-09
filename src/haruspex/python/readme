@@ -1,0 +1,11 @@
+to run these programs, invoke python
+
+for instance, typing:
+
+python newscred_article_search.py romney
+
+would run newscred with romney as the search criterion
+
+
+Use quotes around terms with spaces
+

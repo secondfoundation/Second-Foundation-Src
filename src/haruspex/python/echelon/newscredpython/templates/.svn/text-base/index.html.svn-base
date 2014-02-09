@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+<title>Sample Application | NewsCred Platform</title>
+<h1>Sample Pages</h1>		
+<h2><a href="/topicpage">Sample Topic Page</a></h2>
+<h2><a href="/articlepage">Sample Article Page</a></h2>
+<h1>API Methods</h1>
+<h2><a href="/topic">Topic Module</a></h2>
+<h2><a href="/article">Article Module</a></h2>
+<h2><a href="/source">Source Module</a></h2>
+<h2><a href="/category">Category Module</a></h2>
+<h2><a href="/author">Author Module</a></h2>
+<h1>Testing Methods</h1>
+<h2><a href="/extract">Topic - Extract Topics</a></h2>
+<h2><a href="/stories">Article Clustering</a></h2>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+<title>Author Module | NewsCred Platform</title>
+{%if error%}
+The following error has occurred:
+	<b>{{error}}</b>
+{%else%}
+
+<h1>Author Module</h1>
+
+<ul>	
+	<li><a href="#topics">Get Related Topics</a></li>
+	<li><a href="#articles">Get Related Articles</a></li>
+	<li><a href="#search">Search Authors with the name 'Paul'</a></li>
+</ul><br />
+
+<h2>Get Author</h2>
+<table>
+	<tr>
+		<td class="first">{{ author.first_name }} {{ author.last_name }}</td>
+		<td>{{ author.guid }}</td>
+	</tr>
+</table>
+
+<h2 id="topics">Get Related Topics</h2>
+<table>
+	{% for topic in related_topics %}
+	<tr>
+		<td class="first">{{ topic.name }}[{{topic.classification}} - {{topic.subclassification}}]</td>
+		<td>{{ topic.guid }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<h2 id="articles">Get Related Articles</h2>
+<table>
+	{% for article in related_articles %}
+	<tr>
+		<td class="first"><a href={{article.link}}>{{ article.title }}</a></td>
+		<td>From {{ article.source }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<h2 id="search">Search Authors with the name Paul</h2>
+<table>
+	{%for author in authors%}
+	<tr>
+		<td class="first">{{ author.first_name }} {{ author.last_name }}</td>
+		<td>{{ author.guid }}</td>
+	</tr>
+	{%endfor%}
+</table>
+<a href="#">Back to top</a><br/>
+{%endif%}
+{% endblock %}

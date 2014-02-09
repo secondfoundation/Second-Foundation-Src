@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+<title>Topic Module | NewsCred Platform</title>
+{%if error%}
+	The following error has occurred:
+	<b>{{error}}</b>
+{%else%}
+	<h1>Topic Module</h1>
+	<ul>
+		<li><a href="#search">Search Topics</a></li>
+		<li><a href="#topic">Get Topic</a></li>
+		<li><a href="#topics">Get Related Topics</a></li>
+		<li><a href="#articles">Get Related Articles</a></li>
+		<li><a href="#articles-sources">Get Related Articles Filtered By Sources</a></li>
+		<li><a href="#images">Get Related Images</a></li>
+		<li><a href="#sources">Get Topic Sources</a></li>
+		<li><a href="#extract">Extract Related Topics</a></li>
+	</ul>
+	<br />
+	
+	<h2 id="search">Topic Search</h2>
+	<table>
+		{% for topic in searched_topics %}
+		<tr>
+			<td class="first">{{ topic.name }}</td>
+			<td>{{ topic.guid }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	
+	<h2 id="topic">Get Topic</h2>
+	<table>
+		<tr>
+			<td class="first">
+				Name: {{ topic.name }}<br/>
+				GUID: {{ topic.guid }}<br/>						
+				Classification: {{ topic.classification }}<br/>
+				Sub-classification: {{ topic.subclassification }}<br/><br/>
+				Description:<br/>
+				{{ topic.description }}<br/><br/>
+			</td>
+		</tr>
+	</table>
+
+	<h2 id="topics">Get Related Topics</h2>
+	<table>
+		{% for topic in related_topics %}
+		<tr>
+			<td class="first">{{ topic.name }}[{{topic.classification}} - {{topic.subclassification}}]</td>
+			<td>{{ topic.guid }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<h2 id="articles">Get Related Articles</h2>
+	<table>
+		{% for article in related_articles %}
+		<tr>
+			<td class="first"><a href={{article.link}}>{{ article.title }}</a></td>
+			<td>From {{ article.source }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+
+	<h2 id="articles-sources">Get Related Articles Filtered By Sources</h2>
+	<table>
+		{% for article in related_articles_sources %}
+		<tr>
+			<td class="first"><a href="{{article.link}}">{{ article.title }}</a></td>
+			<td> From {{ article.source }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+<h2 id="images">Get Related Images</h2>
+<table>
+	{% for image in related_images %}
+	<tr>
+		<td class="first">{{ image.image_small }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<h2 id="sources">Get Topic Sources</h2>
+<table>
+	{% for source in topic_sources %}
+	<tr>
+		<td class="first">{{ source.name }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<h2 id="extract">Extract Related Topics</h2>
+<table>
+	{% for topic in extracted_topics %}
+	<tr>
+		<td class="first">{{ topic.name }}</td>
+		<td>{{ topic.guid }}</td>
+	</tr>
+	{% endfor %}
+</table>
+<a href="#">Back to top</a><br/>
+{%endif%}
+{% endblock %}

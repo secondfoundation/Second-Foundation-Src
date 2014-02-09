@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+	<title>Sample Article Page | NewsCred Platform</title>
+	<link rel="stylesheet" type="text/css" href="media/site.css" />
+</head>
+<body>
+	<div id="header"></div>
+	<div id="content">
+		<span>{{article.source}}</span>		
+		<h1 class="article">{{ article.title }}</h1>
+		<p>{{ article.description|truncatewords:75|striptags }}</p>
+		<a href={{ article.link }}>Read Full Story<a/>
+		<h1 class="related">Related Articles</h1>		
+		<ul>
+			{% for article in related_articles %}
+			<li>
+				<span>{{ article.source }}</span>
+				<h2>{{ article.title }}</h2>
+				<p>{{ article.description|truncatewords:75|striptags }}</p>
+				<a href={{ article.link }}>Read Full Story</a>
+			</li>
+			{%endfor%}
+		</ul>		
+	</div>
+	<div id="sidebar">		
+		<h2 class="first">Related Topics</h2>
+		<ul>
+			{%for topic in related_topics%}
+			<li>
+				<img src={{ topic.image_url }} />
+				<h3>{{ topic.name }}</h3>
+				<div class="clear"></div>
+			</li>
+			{%endfor%}
+		</ul>
+		<h2>Related Photos</h2>
+		<div id="slideshow">
+			{%for image in related_images%}
+			<img src= {{image.image_large}}?width=240&height=180 />
+			{%endfor%}
+		</div>			
+	</div>
+	<div id="footer"></div>
+	<script type="text/javascript" src="media/jquery.min.js"></script>
+	<script type="text/javascript" src="media/site.js"></script>	
+</body>
+</html>

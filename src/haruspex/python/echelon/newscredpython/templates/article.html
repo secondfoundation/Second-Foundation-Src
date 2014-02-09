@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+ 
+{% block content %}
+<title>Article Module | NewsCred Platform</title>
+{%if error%}
+The following error has occurred:
+	<b>{{error}}</b>
+{%else%}
+
+	<h1>Article Module</h1>
+	<ul>
+		<li><a href="#search">Search Articles</a></li>
+		<li><a href="#article">Get Article</a></li>
+		<li><a href="#topics">Get Related Topics</a></li>
+		<li><a href="#articles">Get Related Articles</a></li>
+		<li><a href="#articles-sources">Get Related Articles Filtered By Sources</a></li>
+		<li><a href="#images">Get Related Images</a></li>
+	</ul><br />
+	<h2 id="search">Search Articles</h2>
+	<table>
+		{% for article in searched_articles %}
+		<tr>
+			<td class="first"><a href={{article.link}}>{{ article.title }}</a></td>
+			<td>{{ article.guid }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<h2 id="article">Get Article</h2>
+	<table>
+		<tr>
+			Title: <a href={{article.link}}>{{article.title}}</a><br/>
+			GUID: {{article.guid}}<br/>		
+			Description:<br/>
+			{{article.description}}<br/><br/>
+		</tr>
+	</table>
+	
+	<h2 id="topics">Get Related Topics</h2>
+	<table>
+		{% for topic in related_topics %}
+		<tr>
+			<td class="first">{{ topic.name }}[{{topic.classification}} - {{topic.subclassification}}]</td>
+			<td>{{ topic.guid }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<h2 id="articles">Get Related Articles</h2>
+	<table>
+		{% for article in related_articles %}
+		<tr>
+			<td class="first"><a href={{article.link}}>{{ article.title }}</a></td>
+			<td>From {{ article.source }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+
+	<h2 id="articles-sources">Get Related Articles Filtered By Sources</h2>
+	<table>
+		{% for article in related_articles_sources %}
+		<tr>
+			<td class="first"><a href="{{article.link}}">{{ article.title }}</a></td>
+			<td> From {{ article.source }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+
+	<h2 id="images">Get Related Images</h2>
+	<table>
+		{% for image in related_images %}
+		<tr>
+			<td class="first">{{image.image_small}}</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<a href="#">Back to top</a><br/>
+{%endif%}
+{% endblock %}
