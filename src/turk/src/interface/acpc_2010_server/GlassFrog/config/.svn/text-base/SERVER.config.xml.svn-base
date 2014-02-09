@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Server>
+ <!-- The timeout (in milliseconds) all connections to the server are subject
+      to, such as match creation and queries -->
+ <Timeout>10000</Timeout>
+ <!-- The port the server will be started on -->
+ <Port>9000</Port>
+ <!-- Must be one of the following {ALLOW, NEVER, AUTO} 
+      Warning: ALLOW may cause logs to have multiple matches in a single log -->
+ <DuplicatePolicy>NEVER</DuplicatePolicy>
+</Server>

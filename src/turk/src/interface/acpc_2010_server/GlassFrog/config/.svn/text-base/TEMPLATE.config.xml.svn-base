@@ -1,0 +1,7 @@
+<!-- DO NOT MODIFY OR DELETE, used by matchConstructor in the tools directory
+     for use of creating config files from the command line tool. -->
+<Config xmlns="urn:nonstandard:config"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="urn:nonstandard:config 
+     file:xsd/config.xsd">
+</Config>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings>
+<Name>CPRG Player</Name>
+<BuyIn>200</BuyIn>
+<LogPath>logs/</LogPath>
+</Settings>

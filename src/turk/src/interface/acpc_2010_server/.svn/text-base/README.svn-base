@@ -1,0 +1,217 @@
+Poker GUI Server/Util/Interface -- Version 1.1.4
+
+This README will cover the building and running instructions for the both
+projects in the pokergui/ directory.  Please see the README files in each
+respective project for further details.
+
+Notes:
+
+These projects are all in development still and are subject to change.  Check
+the README for additional notes when encountering problems.
+
+Please see the LICENSE file in each project for information on the LICENSE
+associated with the code.
+
+About
+-----
+
+* GlassFrog
+
+This is the poker server.  By default, it runs on port 9000 and serves poker
+rooms.  There can only be one instance running on a given machine at any time
+unless the source is modified otherwise since the util and the GUI both send
+requests down this port.
+
+* Swordfish
+
+This is the poker GUI.  It is a graphical user interface for humans to play
+bots through GlassFrog.  There is a connection dialog that will allow users to
+seek rooms that are open for play and sit down at the table.
+
+Software Requirements
+---------------------
+
+Both GlassFrog and Swordfish were developed using the Netbeans IDE
+(http://netbeans.org/) and require a few software packages that might not be
+installed on your machine.  Please ensure you have the following.
+
+* Java 
+
+As mentioned above, Swordfish and GlassFrog are written in Java.  We recommend
+using Java SE 6 as it is the version that has been primarily used for
+development and teseting.
+
+The Swing libraries used in Swordfish have been included within the project, so
+even if you don't have Swing libraries available, the project should still
+build.
+
+Mac OSX users unfamiliar with Java may note that their machine is not using
+Java SE 6 by default.  Assuming you have the software installed, you can manage
+how OSX decides which Java version to use with the "Java Preferences"
+application.  It can be found under /Applications/Utilities/Java\
+Preferences.app/
+
+* Apache Ant (http://ant.apache.org/)
+
+ant is currently used to build the project and will be required to use the
+existing build architechture.  Without ant you will need to check the build
+targets in the build.xml file and execute them manually.
+
+* Python and Perl (recommended)
+
+Though not strictly required, there are several tools that have been created to
+make using the server easier.  Currently these tools are written in perl and
+python.
+
+
+Supported Platforms 
+-------------------
+
+Please be aware that while the code is written in Java and, in theory, is
+portable to any operating system.  It has been tested successfully on machines
+with the following operating systems:
+
+Kubuntu 9.10 (64-bit)
+OSX 10.5.8
+
+We have tested the code on a single Windows machine using Netbeans and Cygwin.
+Although the code builds, we had problems running the code.  At this point we
+do not have sufficient time to debug this problem.  Since all of the
+competition submissions are required to run under Linux, we are hoping that
+competitors have such a machine available for their own development.
+
+
+Common
+------
+
+* Compiling with Netbeans
+
+If you are using the Netbeans IDE (freely available at http://netbeans.org/) to
+build your code then when you first try to build the code Netbeans will raise
+an error which forces you to define a platform for "JDK 1.5".  Follow the
+instructions that Netbeans prompts you with or go to "Java Platforms" under the
+"Tools" menu to add the platform.  Create the new platform with the name "JDK
+1.5" and select the platform folder to be the directory of your JDK Home.
+Netbeans seems to be good with helping you find the right location, but if you
+have trouble this folder should be the same as the folder for JAVA_HOME
+(explained below).
+
+NOTE: if you don't have JDK 1.5 installed but you do have 1.6 then setting the
+JDK 1.5 platform to be the home of JDK 1.6 seems to work.  I don't know if this
+is the "right" thing to do, but I haven't encountered any problems with it.
+
+
+* Compiling without Netbeans
+
+NOTE: The automated ant build process requires a parameter that specifies where
+your JDK is.  The scripts will attempt to use the JAVA_HOME environment
+variable for this.  For information on how to set JAVA_HOME see the references
+later in the README.
+
+== With ant and JAVA_HOME defined ==
+
+Running "ant" from the root of the GlassFrog and Swordfish directories should
+compile each of those projects, respectively.
+
+== With ant and JAVA_HOME undefined ==
+
+If JAVA_HOME is not defined, the build should fail and output a message
+instructing you what to do.  If you do not want to specify JAVA_HOME, you can
+run "ant -Dplatforms.JDK_1.5.home=<path_to_JDK_home>" instead.  This
+effectively tells ant where JAVA_HOME is from the command line.
+
+== Without ant ==
+
+Without ant you will need to check the build targets in the build.xml file and
+execute them manually.
+
+* Setting JAVA_HOME
+
+If you do not know what JAVA_HOME should be set to, there are a few resources
+listed below for different operating systems on what to set the variable to.
+If these references are out of date, you may just want to search the internet
+as there seems to be many pages related to setting JAVA_HOME.  Also, be aware
+that these resources are provided as examples only and have not all been tested
+for correctness.
+
+== OSX ==
+You can set JAVA_HOME as per the instructions at
+http://developer.apple.com/mac/library/qa/qa2001/qa1170.html
+
+== Unix ==
+
+Both of the following links provide some information on setting the variable in
+Unix style systems.
+
+http://developers.sun.com/docs/javacaps/installing/jcapsinstgui.inst_jdk_javahome_t.html
+
+https://www.jfire.org/modules/phpwiki/index.php/How%20to%20set%20up%20JAVA_HOME
+
+From the jfire.org link:
+
+Most Linux distributions ship with Java or allow you to install Java from the
+internet. A typical place for a system-wide installed Java is
+/usr/lib/jvm/java-{version}/. If you are not sure whether Java is installed on
+your system, or you don't have the privileges to install new system software,
+you may download the latest Java 6 JDK from Sun (http://java.sun.com/) and
+install it to your home directory. When you know where exactly your Java JDK is
+installed, you are ready to set the environment variable. We assume you are
+using bash as shell.
+
+To simply set the environment variable for your current shell enter:
+export JAVA_HOME={path to your java installation}
+This setting will be lost whenever you close that shell.
+
+To set this variable for all user shells, edit the file ~/.bashrc and add the
+line:
+export JAVA_HOME={path to your java installation}
+somewhere to this file.
+
+You may also want to add the Java bin directory to your PATH variable (this is
+where the system searches for executables). To do so, add the following line
+after the line above:
+export PATH=$JAVA_HOME/bin:$PATH
+
+And to set this variable globally for the whole computer, edit the file
+/etc/profile and add the line:
+export JAVA_HOME={path to your java installation}
+somewhere (preferably at the end) to this file. Additionally - as already
+explained above for the user shells -, you should add java to your search path,
+if it is not already (chances are high for the Java package coming with your
+distribution that it already is).
+
+== Windows ==
+
+Both of the following links provide some information on setting the variable in
+Unix style systems.
+
+http://developers.sun.com/docs/javacaps/installing/jcapsinstgui.inst_jdk_javahome_t.html
+
+https://www.jfire.org/modules/phpwiki/index.php/How%20to%20set%20up%20JAVA_HOME
+
+From the jfire.org link:
+
+Windows XP
+English Windows XP: Click "Start" -> "Control Panel" and open "System". Choose
+the "Advanced" tab and click on the button "Environment Variables". In the pane
+"System Variables" add a variable named "JAVA_HOME" and as variable value put
+the address of a valid Java JDK directory (e.g. on my PC this is "C:\Program
+Files\Java\jdk1.6.0_04")
+
+
+* Running
+
+Every projet can be run through Netbeans or by typing "java -jar X.jar" from the
+dist folder (where X is the current project you wish to run).  More details on
+the usage for each project can be found in the README with the corresponding
+project's directory.
+
+Code Documentation
+------------------
+
+* javadocs
+
+Javadocs for all of the code will be created during compilation code and placed
+in the project's dist/javadoc/ directory.  If you are looking to modify or
+extend the code, this would be a good place to start to get a feel for the
+layout of the code.

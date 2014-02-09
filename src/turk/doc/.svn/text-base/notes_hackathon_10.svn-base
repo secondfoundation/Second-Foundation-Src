@@ -1,0 +1,17 @@
+some object 
+-------------
+hand 
+players
+bets history
+game 
+pot size
+community cards
+blinds
+
+player 
+------------
+chips 
+name 
+position
+in_play?
+hand

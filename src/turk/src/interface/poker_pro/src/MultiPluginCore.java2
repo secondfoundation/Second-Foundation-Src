@@ -1,0 +1,190 @@
+/*
+ * TCPPlugin.java
+ *
+ * Created on April 27, 2006, 4:46 PM
+ */
+import java.awt.event.*;
+
+import com.biotools.meerkat.*;
+import com.biotools.meerkat.util.*;
+import java.io.*;
+import java.net.*;
+import ca.ualberta.cs.poker.free.server.*;
+import java.awt.*;
+import javax.swing.*;
+/**
+ *
+ * @author Martin Zinkevich
+ */
+public class MultiPluginCore{
+    
+
+    int uofagameIndex;
+    PrintStream out;
+    PrintStream botout;
+    int paseat;
+
+    /**
+     * A list of previous actions that did not seem appropriate
+    .* at the time.
+     * Hashes states to responses.
+     */
+    Hashtable unusedResponses;
+
+    /**
+     * The socket clients connect to.
+     */
+    public ServerSocket socket;
+    
+    
+    /**
+     * The server-side agent for the player
+     */
+    PlayerAgent agent;
+    
+    /** Creates a new instance of TCPPlugin */
+    public TCPPlugin(){
+        try{
+        out = new PrintStream(new FileOutputStream("C:\\TCPPlugin.log"));
+        botout = new PrintStream(new FileOutputStream("C:\\TCPPluginBot.log"));
+        } catch (FileNotFoundException fnf){
+            out = System.out;
+            botout = System.out;
+        }
+        unusedResponse = new Hashtable();
+        uofagameIndex = -1;
+    }
+  
+    public synchronized int getNextHand(){
+      uofagameIndex++;
+      return uofagameIndex;
+    }
+   
+  
+    public void initClient() throws IOException{
+        int port = socket.getLocalPort();
+        Frame f = new Frame("CrazyBot!!!");
+        //f.show();
+        FileDialog fd = new FileDialog(f,"AAAI Bot Startme",FileDialog.LOAD);
+        fd.show();
+        String directory = fd.getDirectory();
+        //f.dispose();
+        String commandLine = "startme.bat 127.0.0.1 "+port;
+        out.println("COMMAND:"+commandLine);
+        out.println("DIRECTORY:"+directory);
+        out.println("Using ProcessBuilder");
+        ProcessBuilder pb = new ProcessBuilder("cmd","/c","startme.bat","127.0.0.1",""+port);
+        pb.directory(new File(directory));
+        Process p = pb.start();
+        InputStream is = p.getInputStream();
+        InputStream iserr = p.getErrorStream();
+        StreamConnect sc = new StreamConnect(is,botout,out);
+        Thread t = new Thread(sc);
+        t.start();
+        StreamConnect scerr = new StreamConnect(iserr,botout,out);
+        Thread terr = new Thread(scerr);
+        terr.start();
+        
+        //String[] args = new String[]{"sh", "-c", commandLine};
+        //Runtime.getRuntime().exec(commandLine);
+        // new File("examples\\randomclient")
+        //Runtime.getRuntime().exec(commandLine,null,new File(directory));
+        out.println("Client initialized");
+    }
+
+    public void initConnection(){
+        try{
+            socket = new ServerSocket(0);
+            initClient();
+            out.println("socket port:"+socket.getLocalPort());
+            Socket childSocket = socket.accept();
+            agent=new PlayerAgent(childSocket,0);
+            agent.setTimeRemaining(1000);
+            if (!agent.receiveMessage().equals("VERSION:1.0.0")){
+                out.println("The first player does not acknowledge the protocol.");
+            }
+            out.println("Successful connection!");
+        } catch(TimeoutException to){
+            out.println("The " + ((to.playerIndex==0) ? "first" : "second") + " player does not acknowledge the protocol.");
+        } catch (SocketException so){
+            out.println(so);
+            out.println("The first player's connection appears broken.");
+        } catch (IOException io){
+            out.println(io);
+            out.println("The first player's connection appears broken.");                  
+        }
+    }
+
+ 
+    public synchronized com.biotools.meerkat.Action getAction(String state, GameInfo info){
+        try{
+        String response = (String)(unusedResponses.get(state));
+        if (response==null){
+	
+        do{
+            out.println("Response attempt for state:"+state);
+              response = agent.receiveMessage();
+            out.println("Response received:"+response);
+            if (isAppropriate(response,state)){
+              break;
+            }
+            addToUnusedResponses(response);
+        } while(true);
+        }
+        out.println("Response accepted:"+response);
+        char c = getActionFromResponse(response);
+        switch(c){
+            case 'r':
+                return com.biotools.meerkat.Action.raiseAction(info);
+            case 'c':
+                return com.biotools.meerkat.Action.callAction(info);
+            case 'f':
+            default:
+                return com.biotools.meerkat.Action.foldAction(info);
+        }
+        } catch (TimeoutException to){
+            out.println("Timeout exception in response attempt for state:"+getMatchState());
+            return com.biotools.meerkat.Action.foldAction(info);
+        }
+    }
+    
+    
+    
+    public void addToUnusedResponses(String response){
+        if (response.length()<2){
+            return;
+        }
+        String responseFront = response.substring(0,response.length()-2);
+        unusedResponses.put(responseFront,response);
+    }
+    
+    /**
+     * Tests if a response is actually a response to the CURRENT state.
+     */
+    public boolean isAppropriate(String response, String currentState){
+        if (response.length()<2){
+            return false;
+        }
+
+        String responseFront = response.substring(0,response.length()-2);
+        return (currentState.equals(responseFront));
+    }
+    
+    /**
+     * Gets the last character of a response, which should be 'c', 'r', or 'f'
+     */
+    public char getActionFromResponse(String response){
+        return response.charAt(response.length()-1);
+    }
+    
+
+    public synchronized void sendMatchState(String matchState){
+        out.println("SENDING:"+matchState);
+        try{
+            agent.sendMessage(matchState);
+        } catch (TimeoutException to){
+        }
+    }
+    
+    
+}

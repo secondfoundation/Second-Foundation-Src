@@ -1,0 +1,19 @@
+jotting down a few ideas here:
+
+1) psuedo-random generation "shuffling" is going to be nontrivial. I have build an idiotic one, but we desperately 
+need a more robust method. (unless the logic that follows is incorrect somehow)
+
+firstly: clearly there are 52! possible card combinations
+second : if we pass 32 bit random number generations, we only have 4 billion possible seeds
+
+52! >> 4 billion, so we are not remotely fully sampling our deck space. 
+
+UPDATE: 
+
+"Python uses the Mersenne Twister as the core generator. It produces 53-bit precision floats and has a period of 2**19937-1"
+
+This is much better. 2^53 ~ 9*10^15 -- though this is still a bit smaller than 52!
+
+* -----------------------------
+
+2) 

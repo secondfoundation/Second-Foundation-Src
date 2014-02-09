@@ -1,0 +1,7 @@
+TESTS WE SHOULD ADD:
+--------------------------
+
+- need more global tests
+  in particular, need a global verification test
+  where we provide a set of known cards (ideally, with a complicated outcome, like a side pot)
+  and can run to ensure we are running the 'game of poker' completely deterministically correct

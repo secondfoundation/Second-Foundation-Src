@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Gamedef xmlns="urn:nonstandard:gamedef"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="urn:nonstandard:gamedef
+     file:./gamedef.xsd">
+ <Rounds>4</Rounds>
+ <MinPlayers>2</MinPlayers>
+ <MaxPlayers>2</MaxPlayers>
+ <MinBet>10</MinBet>
+ <MaxBet>20</MaxBet>
+ <StackSize>1000</StackSize>
+ <SmallBlind>5</SmallBlind>
+ <BlindStructure>1|2</BlindStructure>
+ <PrivateCards>2|0|0|0</PrivateCards>
+ <PublicCards>0|3|1|1</PublicCards>
+ <BetsPerRound>3|4|4|4</BetsPerRound>
+ <BetStructure>1|1|2|2</BetStructure>
+ <ReverseBlinds/>
+ <DoylesGame/>
+</Gamedef>

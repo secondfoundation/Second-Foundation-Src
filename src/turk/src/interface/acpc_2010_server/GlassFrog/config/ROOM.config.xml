@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Room>
+ <!-- The timeout (in milliseconds) connections to the room are subject to.
+      This would be for players connecting to the room initially -->
+ <Timeout>10000000</Timeout>
+ <!-- The base for all ports rooms are started on.  9001 will be 9001-9999 -->
+ <Portbase>9001</Portbase>
+ <!-- Delete <Save/> to disable room save files -->
+</Room>

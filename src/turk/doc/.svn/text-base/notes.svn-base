@@ -1,0 +1,25 @@
+1) api design: we should be able to design a unified API for both the engine and interface:
+
+-interface(struct data, struc decision)
+
+-engine(struc data, struc decision)
+
+Where the data struc (does not have to be a python struc, but some sort of object) 
+contains all the previous data. For poker, this seems to literally only the bet 
+each player (including our bot) has made, the cards you are holding, and 
+any information about players from previous hands. 
+
+The decision struct should only be what action to take. Could even just be a string
+or something.
+
+*---------------
+
+2) How should we deal with the cards? I guess the natural thing to do is write 
+a poker playing program, and let that dictate what a natural set of poker cards 
+are. My first thought was to store them as integers, numbered 1-52, maybe with a 
+map to a string identifier.
+
+*---------------
+
+3) we might want to invest the time in making this general, since it could be 
+worth investigating other decision systems, such as stock trading or sports betting.

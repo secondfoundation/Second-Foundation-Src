@@ -1,0 +1,28 @@
+Swordfish Version 3.0
+
+This README covers the build and running instructions for the GUI program 
+released by the University of Alberta for testing poker agents that are 
+compatible with the Annual Computer Poker Competition format.  This program
+allows participants and other users to test Human-Agent interaction.
+
+Building
+--------
+To build simply type "ant" in the root directory.  If this fails, please see
+the main README file for more detailed instructions.
+
+Running
+-------
+After compiling, simply execute the run.sh script or type "java -jar
+dist/Swordfish.jar" from the Swordfish directory to to run the application.
+You must have a valid server running and have that server configured.  Config
+examples can be found in the settings directory.
+
+Using the GUI
+-------------
+Please see the GlassFrog README file for information on how to set up the
+server to provide matches for the GUI client.
+
+Project and Versioning
+----------------------
+This product was created using Java 5 and Netbeans 6.1 and can be run and 
+compiled through Netbeans 6.1 and greater.

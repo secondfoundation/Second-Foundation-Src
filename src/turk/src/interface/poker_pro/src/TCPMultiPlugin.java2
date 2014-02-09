@@ -1,0 +1,301 @@
+/*
+ * TCPPlugin.java
+ *
+ * Created on April 27, 2006, 4:46 PM
+ */
+import java.awt.event.*;
+
+import com.biotools.meerkat.*;
+import com.biotools.meerkat.util.*;
+import java.io.*;
+import java.net.*;
+import ca.ualberta.cs.poker.free.server.*;
+import java.awt.*;
+import javax.swing.*;
+/**
+ *
+ * @author Martin Zinkevich
+ */
+public class TCPPlugin implements Player{
+    String ALWAYS_CALL_MODE = "ALWAYS_CALL_MODE";
+    Card holeCard1;
+    Card holeCard2;
+    Card oppCard1;
+    Card oppCard2;
+    int uofagameIndex;
+    String bettingSequence;
+    PrintStream out;
+    PrintStream botout;
+    int paseat;
+    GameInfo info;
+    Preferences prefs;
+    /**
+     * The socket clients connect to.
+     */
+    public ServerSocket socket;
+    
+    
+    /**
+     * The server-side agent for the player
+     */
+    PlayerAgent agent;
+    
+    /** Creates a new instance of TCPPlugin */
+    public TCPPlugin(){
+        try{
+        out = new PrintStream(new FileOutputStream("C:\\TCPPlugin.log"));
+        botout = new PrintStream(new FileOutputStream("C:\\TCPPluginBot.log"));
+        } catch (FileNotFoundException fnf){
+            out = System.out;
+            botout = System.out;
+        }
+        prefs=new Preferences();
+        uofagameIndex = -1;
+    }
+  
+    
+   /**
+    * If you implement the getSettingsPanel() method, your bot will display
+    * the panel in the Opponent Settings Dialog.
+    * @return a GUI for configuring your bot (optional)
+    */
+   public JPanel getSettingsPanel() {
+      JPanel jp = new JPanel(new GridLayout(2,2));
+      /*final JCheckBox acMode = new JCheckBox("Always Call Mode", prefs.getBooleanPreference(ALWAYS_CALL_MODE));
+      acMode.addItemListener(new ItemListener() {
+         public void itemStateChanged(ItemEvent e) {
+            prefs.setPreference(ALWAYS_CALL_MODE, acMode.isSelected());
+         }        
+      });
+      jp.add(acMode);*/
+      jp.add(new JLabel("startme.bat Location"));
+      final JTextField sm = new JTextField(20);
+      jp.add(sm);
+      jp.add(new JLabel("Output File"));
+      final JTextField outFile = new JTextField(20);
+      jp.add(outFile);
+      return jp;
+   }
+   
+  
+    public void initClient() throws IOException{
+        int port = socket.getLocalPort();
+        Frame f = new Frame("CrazyBot!!!");
+        //f.show();
+        FileDialog fd = new FileDialog(f,"AAAI Bot Startme",FileDialog.LOAD);
+        fd.show();
+        String directory = fd.getDirectory();
+        //f.dispose();
+        String commandLine = "startme.bat 127.0.0.1 "+port;
+        out.println("COMMAND:"+commandLine);
+        out.println("DIRECTORY:"+directory);
+        out.println("Using ProcessBuilder");
+        ProcessBuilder pb = new ProcessBuilder("cmd","/c","startme.bat","127.0.0.1",""+port);
+        pb.directory(new File(directory));
+        Process p = pb.start();
+        InputStream is = p.getInputStream();
+        InputStream iserr = p.getErrorStream();
+        StreamConnect sc = new StreamConnect(is,botout,out);
+        Thread t = new Thread(sc);
+        t.start();
+        StreamConnect scerr = new StreamConnect(iserr,botout,out);
+        Thread terr = new Thread(scerr);
+        terr.start();
+        
+        //String[] args = new String[]{"sh", "-c", commandLine};
+        //Runtime.getRuntime().exec(commandLine);
+        // new File("examples\\randomclient")
+        //Runtime.getRuntime().exec(commandLine,null,new File(directory));
+        out.println("Client initialized");
+    }
+    public void initConnection(){
+        try{
+            socket = new ServerSocket(0);
+            initClient();
+            out.println("socket port:"+socket.getLocalPort());
+            Socket childSocket = socket.accept();
+            agent=new PlayerAgent(childSocket,0);
+            agent.setTimeRemaining(1000);
+            if (!agent.receiveMessage().equals("VERSION:1.0.0")){
+                out.println("The first player does not acknowledge the protocol.");
+            }
+            out.println("Successful connection!");
+        } catch(TimeoutException to){
+            out.println("The " + ((to.playerIndex==0) ? "first" : "second") + " player does not acknowledge the protocol.");
+        } catch (SocketException so){
+            out.println(so);
+            out.println("The first player's connection appears broken.");
+        } catch (IOException io){
+            out.println(io);
+            out.println("The first player's connection appears broken.");                  
+        }
+    }
+
+    public void init(Preferences prefs){
+        prefs.get("BOTDIR","examples\\randomclient");
+    }
+    
+    public com.biotools.meerkat.Action getAction(){
+        try{
+        String response;
+        do{
+            out.println("Response attempt for state:"+getMatchState());
+              response = agent.receiveMessage();
+            out.println("Response received:"+response);
+        } while(!isAppropriate(response));
+        out.println("Response accepted:"+response);
+        char c = getActionFromResponse(response);
+        //out.println("Action parsed:"+c);
+        //char c = 'c';
+        switch(c){
+            case 'r':
+                return com.biotools.meerkat.Action.raiseAction(info);
+            case 'c':
+                return com.biotools.meerkat.Action.callAction(info);
+            case 'f':
+            default:
+                return com.biotools.meerkat.Action.foldAction(info);
+        }
+        } catch (TimeoutException to){
+            out.println("Timeout exception in response attempt for state:"+getMatchState());
+            return com.biotools.meerkat.Action.foldAction(info);
+        }
+        //return Action.foldAction(info);
+    }
+    
+    public void gameStartEvent(GameInfo info){
+        if (socket==null){
+            initConnection();
+        }
+        agent.setTimeRemaining(7000);
+        uofagameIndex++;
+        bettingSequence = "";
+        this.holeCard1=null;
+        this.holeCard2=null;
+        this.oppCard1=null;
+        this.oppCard2=null;
+        this.info = info;
+    }
+    
+    public void gameStateChanged(){
+        
+    }
+    
+    
+    public void holeCards(Card h1, Card h2, int seat){
+        holeCard1 = h1;
+        holeCard2 = h2;
+        paseat = seat;
+        sendMatchState();
+    }
+
+    public void dealHoleCardsEvent(){
+        
+    }
+    
+    public void winEvent(int seat, double amount, String cards){
+        
+    }
+    
+    public void gameOverEvent(){
+    }
+    
+    public void showdownEvent(int seat, Card c1, Card c2){
+        if (seat!=paseat){
+            oppCard1 = c1;
+            oppCard2 = c2;
+            //out.println("Showdown event state:"+getMatchState());
+            sendMatchState();
+        }
+    }
+    
+    public void stageEvent(int stage){
+        if (stage!=Holdem.PREFLOP){
+            bettingSequence += "/";
+            //out.println("Sending for stage event "+stage+" state:"+getMatchState());
+
+            sendMatchState();
+        }
+    }
+    public void actionEvent(int pos, com.biotools.meerkat.Action action){
+        if (action.isFold()){
+            bettingSequence += "f";
+            //out.println("Sending for actionEvent(fold):"+getMatchState());
+            sendMatchState();
+        } else if (action.isCheckOrCall()){
+            bettingSequence += "c";
+            boolean roundOver = bettingSequence.endsWith("cc")||bettingSequence.endsWith("rc");
+            if (!roundOver){
+                //out.println("Sending for actionEvent(call):"+getMatchState());
+            
+                sendMatchState();
+            }
+        } else if (action.isBetOrRaise()){
+            bettingSequence += "r";
+            //out.println("Sending for actionEvent(raise):"+getMatchState());
+            sendMatchState();
+        }
+    }
+    
+    
+    /**
+     * Tests if a response is actually a response to the CURRENT state.
+     */
+    public boolean isAppropriate(String response){
+        if (response.length()<2){
+            return false;
+        }
+        if (info.getCurrentPlayerSeat()!=paseat){
+            return false;
+        }
+        String responseFront = response.substring(0,response.length()-2);
+        //out.println("FRONT OF RESPONSE:"+responseFront);
+        //out.println("STATE TO MATCH:"+getMatchState());
+        return (getMatchState().equals(responseFront));
+    }
+    
+    /**
+     * Gets the last character of a response, which should be 'c', 'r', or 'f'
+     */
+    public char getActionFromResponse(String response){
+        return response.charAt(response.length()-1);
+    }
+    
+    public void sendMatchState(){
+        out.println("SENDING:"+getMatchState());
+        try{
+            agent.sendMessage(getMatchState());
+        } catch (TimeoutException to){
+        }
+    }
+    
+    public String getMatchState(){
+        int uofaserverseat = (info.getButtonSeat()==paseat) ? 1 : 0;
+        String result = "MATCHSTATE:" + uofaserverseat + ":" + uofagameIndex + ":"+bettingSequence +":";
+        String oppCards = (oppCard1==null) ? "" : ("" + oppCard1 + oppCard2);
+        String holeCards = (holeCard1==null) ? "" : ("" + holeCard1 + holeCard2);
+        String nonButtonCards = (uofaserverseat==0) ? holeCards : oppCards;
+        String buttonCards = (uofaserverseat==1) ? holeCards : oppCards;
+        result = result + nonButtonCards + "|" + buttonCards;
+        Hand board = info.getBoard();
+        if (board.size()>=3){
+            String flop = "/"+ board.getCard(1) + board.getCard(2) + board.getCard(3);
+            result = result + flop;
+        }
+        if (board.size()>=4){
+            String turn = "/" + board.getCard(4);
+            result = result + turn;
+        }
+        if (board.size()>=5){
+            String river = "/" + board.getCard(5);
+            result = result + river;
+        }
+        
+        return result;
+    }
+    
+    public static void main(String[] args){
+        TCPPlugin plugin = new TCPPlugin();
+        plugin.initConnection();
+    }
+}

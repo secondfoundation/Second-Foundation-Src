@@ -1,0 +1,211 @@
+The GlassFrog Poker Server - For use in the AAAI Computer Poker Competition and
+More.
+
+A basic overview of the commands to run a match between a collection of bots is
+listed under the "Using the Server" section below.  If you want to try to dive
+in, head there.  For more details about the server, its capabilities, and
+layout, then read from the top.
+
+General
+-------
+
+The GlassFrog Poker Server is a multi-purpose poker server that allows for the
+creation of rooms and the connection of agents using the Annual Computer Poker
+Competition (ACPC) hand format.  The code also introduces a new feature to the
+server: the coupling with the Swordfish Poker GUI which enables you to test
+your bots in Heads Up Limit and No Limit.
+
+The server is set up to listen for connections on port 9000 (though the port
+number is configurable).  These connections are a specified set of commands
+that allow for the creation of rooms and the players connecting to these rooms.
+Rooms can also be auto-created using a special function call.  Automatically
+created room are primarily for use with multiple GUIs connecting to the server
+and auto-starting a room and a bot, but other uses may be made.
+
+Once the server is running, a Room object can then be created. Rooms use a 
+game definition to start.  These game definition files are XML files with a
+list of rules about the game to be played.  Heads up Limit and No Limit as well
+as 3 Player Limit Ring are included in the gamedef directory.
+
+Features
+--------
+
+A room may also be made with a pre-defined config file (see the config
+directory for some examples).  By specifying an agent's executable for each bot
+in a config file's botlist, rooms can be created with automatically started
+agents.  This eliminates the need to manually connect the agents to a room. The
+config files are in XML and have a corresponding XSD (XML Schema Document) for
+validity checks (in the xsd directory).
+
+The server also has a Keys functionality.  This allows for users to connect to
+the server using a key, which can be generated from the keygen.py script in the
+tools directory.  This allows for an administrator to have only users with a 
+valid key to connect to the server and can specify different games to be run 
+based on a user's key.
+
+Another new feature is the Save functionality.  A match can be restarted on a 
+per hand basis in the event of a disconnect or user quit.  A D/C will fold the
+errant player's hand, and save at the next hand to be played.  If no actions
+were taken in the hand, then the current hand may be used.  This feature also
+has a utility to restore a match in the event of a server crash, recreating the
+save files from the logs.  All of the matches are saved in the save directory.
+
+Compiling
+---------
+
+To build simply type "ant" in the root directory.  If this fails, please see
+the main GlassFrog/Swordfish README file for more detailed instructions.
+
+Directory Layout
+----------------
+
+Here we will briefly describe the contents of each of the directories in the
+GlassFrog project:
+
+logs     - Contains the Server, Dealer and Room logs
+output   - Contains any messages a bot has written to stderr and stdout
+save     - Saved game files which allow players to resume matches midway
+keys     - Contains the keys.xml file which associates a match configuration
+           with a key so different GUI players can be given different opponents
+           based on their key.
+scripts  - Primarily a home for user made scripts.  Contains an example of a 
+           startme script used (and required in your Annual Computer Poker
+           Competition submission) for starting your bot.
+tools    - Tool scripts to help start rooms, generate keys, run matches, and
+           determine the server's state
+gamedef  - Game definition files for the different types of playable games 
+config   - XML configuration files for rooms, the dealer, the server, and
+           matches
+xsd      - XML Schema files used for validating the XML configuration files.
+           These provide a good idea of the format for the XML config files.
+javadocs - The javadocs for the project
+
+
+More detailed descriptions about some of the directories are included below.
+
+* Logs and Output
+
+Once running, there are a number of logs kept by the server. The output 
+directory contains any messages a bot has written to stderr and stdout. The 
+logs directory contains the Server, Dealer and Room Logs, each with their own 
+sets of data.  The Dealer also contains a stripped down rawlog without the 
+logging tags given by Java Logger.
+
+* Tools
+
+There are a number of support tools written to aid the administrator of the
+server.  We provide brief descriptions of their fuctionality below.  Many of
+the scripts provide usage information when called without arguments.  Please
+take specific note of the matchConstructor.py script as it is a main tool for
+creating matches.
+
+GlassFrog/clean.sh
+  - clears all the logs, *~ files and the saves.
+
+GlassFrog/run.sh
+  - runs the GlassFrog jar file with some memory specifications
+
+GlassFrog/tools/ACPCMatchCreator.pl
+  - Outputs a tournament match list from tournament parameters
+
+GlassFrog/tools/ACPCScheduleMatches.pl
+  - Automated tool for starting matches using the GlassFrog server
+
+GlassFrog/tools/keygen.py
+  - create a key for a set of users
+
+GlassFrog/tools/matchConstructor.py
+  - create a room for an Annual Computer Poker Competition match on the server
+
+GlassFrog/tools/monitor_server.py
+  - Monitors the server and emails administrators in case the server crashes
+    (NOTE: email addresses are hard-coded and the script will need modification
+     for your individual use)
+
+GlassFrog/tools/queryMatch.py
+  - Query the status of a room or all the rooms running on the server
+
+GlassFrog/tools/queryServer.py
+  - Send a command to the server
+
+* Configuration
+
+There are several configuration files that the server uses to properly generate
+matches for agents.  These are contained in the config, gamedef, and keys
+directories.  The parameters for the files in the config directory have
+comments explaining the different fields.  The XML Schema Document files in the
+xsd directory may also give you a sense for the required parameters should you
+wish to modify the configuration files.
+
+Using the Server
+----------------
+
+Starting a match consists of three steps:
+
+1) Start the server by running ./run.sh from the GlassFrog/ directory
+2) Create a room for the match on the server
+3) Connect the agents to the new room on the server
+
+Executing the second and third step can vary depending on the situation.  We
+describe three basic situations below.
+
+NOTE: The GlassFrog poker server expects agent executables to take two
+parameters: the server IP and the connection port.  In the case of starting
+your own agent (which may require more parameters), you may need to write a
+small script, similar to the scripts/startme.sh script, to wrap your own
+program and pass it the necessary parameters.  A startme script of this nature
+is required in the submitted entires for the Annual Computer Poker Competition.
+
+* Starting a match between computer agents
+
+After starting the server, a room can be created and agents connected to it
+using the matchConstructor.py script in the tools directory.  This script takes
+several parameters that are explained when the matchConstructor is run without
+arguments.
+
+The following command is an example of using matchConstructor.py, executed from the tools directory:
+
+./matchConstructor.py ROOM_NAME 500 2Player.limit.gamedef.xml 42 AAAIPLAYER PLAYER1_NAME 1000 LOCAL scripts/startme.sh AAAIPLAYER PLAYER2_NAME 1000 LOCAL scripts/startme.sh
+
+The command would start a room with name ROOM_NAME which will play 500 hands of
+the game specified by gamedef/2Player.limit.gamedef.xml using a seed of 42
+between two AAAI Players (with names PLAYER1_NAME and PLAYER2_NAME) that buyin
+for 1000 (note that the buyin amount may be overridden by the specified
+gamedef) and are both run on the local machine using the executable
+GlassFrog/scripts/startme.sh
+
+* Starting a match between a GUI and computer agents
+
+Starting a match with a GUI player can be done both with and without the use of
+user keys.
+
+== Without keys ==
+
+Starting a match between a GUI player and bots is much like starting a match
+with just bots.  After starting the server, create a room using
+matchConstructor.py.  Only specify arguments for the number of bots you want to
+have in the game (e.g., one bot in a two player game).  After the room is
+started, run the Swordfish code to start the GUI client.  It will bring up a
+list of available servers.  Expanding the directory structure for a server will
+display all of the rooms available on the server.  Double clicking on a room or
+clicking the room and then clicking "connect" should join the room and begin
+play.
+
+== With keys ==
+
+As mentioned previously, using keys allows the server to automatically create a
+room and opponents for a GUI user.  If you want to set up keys so rooms can be
+automatically created with a specified opponent, you will need to run
+tools/keygen.py with a config file (which you may need to create, see
+config/SAMPLE_MATCH.config.xml for an example) argument that specifies the
+parameters of the match you want to run.  Once the key has been created and
+added to the keys/keys.xml file, start the server and start the Swordfish GUI.
+From the GUI, select the desired server from the server list, and either double
+click it, or click "AutoConnect".  You will then be prompted for the key that
+you generated.  Enter the key and the match should start.
+
+
+Project and Versioning
+----------------------
+
+This was created using Netbeans 6.1 and uses Java 5.

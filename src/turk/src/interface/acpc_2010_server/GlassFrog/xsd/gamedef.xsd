@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified"
+            xmlns="urn:nonstandard:gamedef" 
+            targetNamespace="urn:nonstandard:gamedef">
+
+  <xsd:element name="Gamedef" type="Gamedef"/>
+
+  <xsd:complexType name="Gamedef">
+    <xsd:all>
+      <xsd:element name="Rounds" type="xsd:positiveInteger" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="MinPlayers" type="xsd:positiveInteger" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="MaxPlayers" type="xsd:positiveInteger" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="MinBet" type="xsd:nonNegativeInteger" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="MaxBet" type="xsd:integer" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="StackSize" type="xsd:positiveInteger" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="SmallBlind" type="xsd:positiveInteger" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="BlindStructure" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="PrivateCards" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="PublicCards" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="BetsPerRound" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="BetStructure" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="ReverseBlinds" type="Boolean" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="DoylesGame" type="Boolean" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="NoLimit" type="Boolean" minOccurs="0" maxOccurs="1"/>
+    </xsd:all>
+  </xsd:complexType>
+
+  <xsd:complexType name="Boolean">
+  </xsd:complexType>
+
+</xsd:schema>

@@ -1,0 +1,26 @@
+TO ADD:
+--------------------------------
+
+* SIMULATOR * 
+
+-side pots are not functioning
+-need to enhance all betting functions, in case of a tie
+
+--------------------------------
+
+* DECISION ENGINE *
+
+-Need to have pow-wow (again!) on decision 
+ engine heuristics to impliment, and then impliment them!
+
+-ideas: pot odds?
+         -- need a way to 'estimate' power of incomplete hand!
+
+--------------------------------
+
+* UTILITIES *
+
+-Need to add a statistical function so we can 
+ ascertain power of differing strategies
+
+-Need to add logger, so we can data-mine our playing

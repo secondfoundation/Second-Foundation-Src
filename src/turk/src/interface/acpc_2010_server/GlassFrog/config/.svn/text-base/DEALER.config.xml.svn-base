@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dealer>
+ <!-- The timeout (in milliseconds) that players will be subject to -->
+ <ActionTimeout>600000</ActionTimeout>
+ <!-- The average time (in milliseconds) per hand that players have to complete
+  their actions.  If they spend more than AverageTimePerHand * NumHands
+  during the entire match, the player will timeout -->
+ <AverageTimePerHand>7000</AverageTimePerHand>
+ <!-- Must be either CALL or FOLD, this is the default player action-->
+ <DefaultAction>CALL</DefaultAction>
+ <!-- Time delay between actions in miliseconds to slow down the game-->
+ <ActionDelay>0</ActionDelay>
+</Dealer>

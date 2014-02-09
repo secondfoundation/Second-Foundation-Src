@@ -1,0 +1,64 @@
+<!-- A sample config file used to start a match.  This one will start a room 
+     named SAMPLE with 500 hands using the 2 player limit gamedef and the seed
+     for the cards of 12345.  It will have 2 bots, one one 127.0.0.1 with the 
+     location of the executable being in the scripts/ directory in the server
+     folder and the other will be on a remote machine with the executable being
+     on the scratch drive
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<Config xmlns="urn:nonstandard:config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:nonstandard:config       file:xsd/config.xsd">
+ <Room>
+  <Name>
+   SAMPLE
+  </Name>
+  <Hands>
+   5000
+  </Hands>
+  <Gamedef>
+   2Player.limit.gamedef.xml
+  </Gamedef>
+  <Seed>
+   12345
+  </Seed>
+ </Room>
+
+ <BotList>
+
+  <Bot>
+   <Type>
+    AAAIPLAYER
+   </Type>
+   <Name>
+    LocalChump
+   </Name>
+   <BuyIn>
+    200
+   </BuyIn>
+   <Location>
+    127.0.0.1
+   </Location>
+   <Executable>
+    scripts/local_bot.sh
+   </Executable>
+  </Bot>
+
+  <Bot>
+   <Type>
+    AAAIPLAYER
+   </Type>
+   <Name>
+    RemoteChump
+   </Name>
+   <BuyIn>
+    200
+   </BuyIn>
+   <Location>
+    192.128.1.100
+   </Location>
+   <Executable>
+    /local/scratch/remote_bot.sh
+   </Executable>
+  </Bot>
+
+ </BotList>
+</Config>

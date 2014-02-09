@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified"
+            xmlns="urn:nonstandard:config" 
+            targetNamespace="urn:nonstandard:config">
+
+  <xsd:element name="Config" type="Config"/>
+
+  <xsd:complexType name="Config">
+    <xsd:sequence>
+      <xsd:element name="Room" type="Room" minOccurs="1" maxOccurs="1"/>
+      <xsd:element name="BotList" type="BotList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Room">
+    <xsd:all>
+      <xsd:element name="Name" type="xsd:string" minOccurs="1"/>
+      <xsd:element name="Hands" type="xsd:positiveInteger" minOccurs="1"/>
+      <xsd:element name="Gamedef" type="xsd:string" minOccurs="1"/>
+      <xsd:element name="Seed" type="xsd:nonNegativeInteger" minOccurs="1"/>
+    </xsd:all>
+  </xsd:complexType>
+  
+  <xsd:complexType name="BotList">
+    <xsd:sequence>
+      <xsd:element name="Bot" type="Bot" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Bot">
+    <xsd:all>
+      <xsd:element name="Type" type="xsd:string" minOccurs="1"/>
+      <xsd:element name="Name" type="xsd:string" minOccurs="1"/>
+      <xsd:element name="BuyIn" type="xsd:positiveInteger" minOccurs="1"/>
+      <xsd:element name="Location" type="xsd:string" minOccurs="1"/>
+      <xsd:element name="Executable" type="xsd:string" minOccurs="1"/>
+    </xsd:all>
+  </xsd:complexType>
+
+</xsd:schema>

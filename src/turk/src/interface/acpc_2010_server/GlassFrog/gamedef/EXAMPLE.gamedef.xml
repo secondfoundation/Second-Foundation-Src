@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Gamedef xmlns="urn:nonstandard:gamedef"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="urn:nonstandard:gamedef
+     file:./gamedef.xsd">
+ <!-- The number of rounds in each hand of play -->
+ <Rounds>4</Rounds>
+ <!-- The minimum number of players needed to start the game -->
+ <MinPlayers>2</MinPlayers>
+ <!-- The maximum number of players allowed in the game.  Note: This value is
+  currently unused.  Should add a check to enforce the MaxPlayer limit -->
+ <MaxPlayers>2</MaxPlayers>
+ <!-- MinBet serves a scalar multiplier for the bets listed in BetStructure -->
+ <MinBet>2</MinBet>
+ <!-- To my knowledge this field is deprecated and no longer used -->
+ <MaxBet>4</MaxBet>
+ <!-- Starting stack size (in "dollars", not bets or blinds) -->
+ <StackSize>400</StackSize>
+ <!-- Size of the small blind in dollars -->
+ <SmallBlind>1</SmallBlind>
+ <!-- The number of small blinds each player must post.  Blinds are assigned to
+  players in sequence until the list of blinds runs out-->
+ <BlindStructure>1|2</BlindStructure>
+ <!-- The number of private cards dealt each round -->
+ <PrivateCards>2|0|0|0</PrivateCards>
+ <!-- The number of public cards dealt each round -->
+ <PublicCards>0|3|1|1</PublicCards>
+  <!-- The number of bets allowed per round -->
+ <BetsPerRound>3|4|4|4</BetsPerRound>
+ <!-- In limit games, a round's bet size is (MinBet * BetStructure[round]) -->
+ <BetStructure>1|1|2|2</BetStructure>
+ <!-- Specifies a reverse blind structure.  That is the second player (the
+  dealer) puts in the small blind, and the first player puts in the big blind -->
+ <ReverseBlinds/>
+ <!-- Specifies if this is Doyle's Game where stacks are reset after every hand
+  and we keep a running score rather than comparing stack sizes -->
+ <DoylesGame/>
+ <!-- Specifies that this is a no-limit game -->
+ <NoLimit/>
+</Gamedef>

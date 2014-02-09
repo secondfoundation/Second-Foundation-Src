@@ -1,0 +1,12 @@
+nameTextField.text=CPRG Player
+logPathTextField.text=logs/
+nameLabel.text=Name
+logPathLabel.text=Log Path
+okButton.text=OK
+cancelButton.text=Cancel
+cancel.Action.text=Cancel
+cancel.Action.shortDescription=
+ok.Action.text=OK
+ok.Action.shortDescription=
+buyInLabel.text=BuyIn
+buyInTextField.text=200
